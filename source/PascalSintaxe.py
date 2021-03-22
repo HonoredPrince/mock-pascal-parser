@@ -97,6 +97,11 @@ class PascalSintaxe:
         if (self.currentSymbol[SYMBOL] == "identifier"):
             self.currentSymbol = self.getNextToken()
             self.ListOfIds_L()
+        else:
+            raise BailoutException(
+                'Expected an identifier but got {} at line {}' \
+                .format(self.currentSymbol[SYMBOL], self.currentSymbol[LINE])
+            )
     
     def ListOfIds_L(self):
         if (self.currentSymbol[TOKEN] != ","):
@@ -225,7 +230,7 @@ class PascalSintaxe:
 
     def ListOfCommands_L(self):
         if (self.currentSymbol[TOKEN] != ';'):
-            raise Exception("Missing : at line {}".format(self.currentSymbol[LINE]))
+            raise Exception("Missing ; at line {}".format(self.currentSymbol[LINE]))
         self.currentSymbol = self.getNextToken()
         
         self.Command()
@@ -284,7 +289,7 @@ class PascalSintaxe:
             self.Command()
             return
         except BailoutException:
-            raise Exception("Expected a command at line{}".format(self.currentSymbol[LINE]))
+            raise Exception("Expected a command at line {}".format(self.currentSymbol[LINE]))
     
     def ElsePart(self):
         if (self.currentSymbol[TOKEN] != "else"):
@@ -379,14 +384,14 @@ class PascalSintaxe:
             if (self.currentSymbol[TOKEN] in ["true", "false"]):
                 self.currentSymbol = self.getNextToken()
                 return
-            if (self.currentSymbol[TOKEN] == "("):
+            if (self.currentSymbol[TOKEN] == "("):   
                 self.currentSymbol = self.getNextToken()
                 self.Expression()
                 if (self.currentSymbol[TOKEN] != ")"):
-                    raise Exception("Unclosed parenthesis at line {}.".format(self.currentSymbol[LINE]))
+                    raise Exception("Unclosed parenthesis at line {}.".format(self.currentSymbol[LINE]))   
                 self.currentSymbol = self.getNextToken()
             else:
-                if (self.currentSymbol[TOKEN] == "not"):
+                if (self.currentSymbol[TOKEN] == "not"):        
                     self.currentSymbol = self.getNextToken()
                     self.Factor()
                 else:
@@ -396,11 +401,12 @@ class PascalSintaxe:
                         )
     
     def TypeNum(self):
-        if (self.currentSymbol not in ["integer", "real"]):
+        if (self.currentSymbol[SYMBOL] not in ["integer", "real"]):
             raise BailoutException(
                 "{} is not a valid type at line {}, expected a number" \
                 .format(self.currentSymbol[TOKEN], self.currentSymbol[LINE])
                 )
+        self.currentSymbol = self.getNextToken()
     
     def Signal(self):
         if (self.currentSymbol[TOKEN] not in ['+', '-']):
