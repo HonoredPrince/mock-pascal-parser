@@ -211,7 +211,7 @@ class PascalSintaxe:
 
         self.OptionalCommands()
 
-        if (self.currentSymbol != "end"):
+        if (self.currentSymbol[TOKEN] != "end"):
             raise Exception(
                 'Expected end at line {}, got {} instead' \
                 .format(self.currentSymbol[LINE], self.currentSymbol[TOKEN])
@@ -283,7 +283,7 @@ class PascalSintaxe:
             self.Expression()
 
             if(self.currentSymbol[TOKEN] != "do"):
-                raise Exception("Missing do after if at line {}.".format(self.currentSymbol[LINE]))
+                raise Exception("Missing do after while at line {}.".format(self.currentSymbol[LINE]))
             self.currentSymbol = self.getNextToken()
 
             self.Command()

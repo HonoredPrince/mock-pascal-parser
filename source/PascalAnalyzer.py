@@ -46,7 +46,7 @@ def genericRegexCreator():
         (r'[0-9]+\.[0-9]*', 'realNumber'),
         (r'[0-9]+', 'integer'),
         
-        (r'[a-zA-Z]+[a-zA-Z0-9_]*', 'identifier'),
+        (r'[a-z]+[a-z0-9_]*', 'identifier'),
 
         (r'[^ \n\r\t]+', 'raise_exception'),
     ]
