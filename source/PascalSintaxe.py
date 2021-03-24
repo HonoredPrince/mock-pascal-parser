@@ -230,7 +230,7 @@ class PascalSintaxe:
 
     def ListOfCommands_L(self):
         if (self.currentSymbol[TOKEN] != ';'):
-            raise Exception("Missing ; at line {}".format(self.currentSymbol[LINE]))
+            return
         self.currentSymbol = self.getNextToken()
         
         self.Command()
@@ -287,6 +287,7 @@ class PascalSintaxe:
             self.currentSymbol = self.getNextToken()
 
             self.Command()
+            
             return
         except BailoutException:
             raise Exception("Expected a command at line {}".format(self.currentSymbol[LINE]))
