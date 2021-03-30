@@ -6,14 +6,22 @@ from source.LexicalResult import LexicalResult
 from source.PascalSintaxe import PascalSintaxe
 
 
-if __name__ == '__main__':
+def argsTest():
     if len(sys.argv) < 2:
         print('ARGSERROR: Use: \'python3 main.py <input file>\' in the command line')
         quit()
 
+    try:
+        file = open(sys.argv[1], 'r')
+        return file
+    except:
+        print("Não foi possível abrir o arquivo")
+        raise
+
+if __name__ == '__main__':
     tokens = []
     
-    pascalFileContent = open(sys.argv[1], 'r')
+    pascalFileContent = argsTest()
 
     lines = pascalFileContent.readlines()
 
