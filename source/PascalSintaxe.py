@@ -1,4 +1,5 @@
 from source.LexicalResult import LexicalResult
+from source.ScopeStack import ScopeStack
 
 TOKEN = 0
 SYMBOL = 1
@@ -14,6 +15,7 @@ class PascalSintaxe:
     tokens = []
     counter = 0
     currentSymbol = None
+    scopeStack = ScopeStack()
 
     def parseTokensToList(self, tokenSequence):
         for i in range(len(tokenSequence)):

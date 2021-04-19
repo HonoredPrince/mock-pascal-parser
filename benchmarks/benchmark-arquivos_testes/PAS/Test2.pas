@@ -8,7 +8,7 @@ begin
    begin
       X := A;
       A := B;
-      B := X   {veja que o �ltimo comando de um bloco n�o possui o ;}
+      B := X  {veja que o �ltimo comando de um bloco n�o possui o ;}
    end         {alguns alunos preferem implementar com ;}
 end.	       
 

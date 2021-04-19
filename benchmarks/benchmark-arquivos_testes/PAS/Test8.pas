@@ -1,5 +1,4 @@
 program operators;
-uses crt;
 begin
     clrscr;
     writeln(17 div 3);
