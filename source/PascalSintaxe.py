@@ -31,6 +31,7 @@ class PascalSintaxe:
         self.currentSymbol = self.getNextToken()
         if (self.currentSymbol[TOKEN] == "program"):
             self.program()
+            self.scopeStack.new_scope()
         else:
             raise Exception(
                 "Program did not start with program keyword. Started with {} instead" \
@@ -39,7 +40,9 @@ class PascalSintaxe:
     
     def program(self):
         self.currentSymbol = self.getNextToken()
-        if (self.currentSymbol[SYMBOL] != "identifier"):
+        if (self.currentSymbol[SYMBOL] == "identifier"):
+            self.scopeStack.create_id(self.currentSymbol[TOKEN], "program_declaration")
+        else:
             raise Exception(
             "Error parsing {} at line {}: missing identifier" \
             .format(self.currentSymbol[TOKEN], self.currentSymbol[LINE])
@@ -63,13 +66,17 @@ class PascalSintaxe:
             self.ListOfVariableDeclarations()
     
     def ListOfVariableDeclarations(self):
-        self.ListOfIds()
+        listIds = self.ListOfIds()
 
         if (self.currentSymbol[TOKEN] != ":"):
             raise Exception("Missing : at line {}".format(self.currentSymbol[LINE]))
         self.currentSymbol = self.getNextToken()
         
+        aux_type = self.currentSymbol[TOKEN]
         self.Type()
+
+        for i in listIds:
+            self.scopeStack.create_id(i, aux_type);
         
         if(self.currentSymbol[TOKEN] != ";"):
             raise Exception("Missing ; at line {}".format(self.currentSymbol[LINE]))
@@ -79,7 +86,7 @@ class PascalSintaxe:
     
     def ListOfVariableDeclarations_L(self):
         try:
-            self.ListOfIds()
+            listIds = self.ListOfIds()
         except BailoutException:
             return
 
@@ -87,7 +94,11 @@ class PascalSintaxe:
             raise Exception("Missing : at line {}".format(self.currentSymbol[LINE]))
         self.currentSymbol = self.getNextToken()
         
+        aux_type = self.currentSymbol[TOKEN]
         self.Type()
+
+        for i in listIds:
+            self.scopeStack.create_id(i, aux_type);
         
         if(self.currentSymbol[TOKEN] != ";"):
             raise Exception("Missing ; at line {}".format(self.currentSymbol[LINE]))
@@ -97,8 +108,9 @@ class PascalSintaxe:
 
     def ListOfIds(self):
         if (self.currentSymbol[SYMBOL] == "identifier"):
+            aux = [self.currentSymbol[TOKEN]]
             self.currentSymbol = self.getNextToken()
-            self.ListOfIds_L()
+            return aux + self.ListOfIds_L()
         else:
             raise BailoutException(
                 'Expected an identifier but got {} at line {}' \
@@ -112,8 +124,9 @@ class PascalSintaxe:
         self.currentSymbol = self.getNextToken()
 
         if (self.currentSymbol[SYMBOL] == "identifier"):
+            aux = [self.currentSymbol[TOKEN]]
             self.currentSymbol = self.getNextToken()
-            self.ListOfIds_L()
+            return aux + self.ListOfIds_L()
 
     def Type(self):
         if (self.currentSymbol[TOKEN] not in ["integer", "real", "boolean"]):
@@ -146,6 +159,9 @@ class PascalSintaxe:
         self.currentSymbol = self.getNextToken()
         
         if (self.currentSymbol[SYMBOL] != 'identifier'):
+            self.scopeStack.create_id(self.currentSymbol[TOKEN], 'proc')
+            self.scopeStack.new_scope()
+        else:
             raise Exception(
                 'Expected procedure identifier at line {}, got {} instead' \
                 .format(self.currentSymbol[LINE], self.currentSymbol[TOKEN])
@@ -163,6 +179,8 @@ class PascalSintaxe:
         self.VariableDeclarations()
         self.SubprogramDeclarations()
         self.CompoundCommand()
+
+        self.scopeStack.end_scope()
     
     def Arguments(self):
         if (self.currentSymbol[TOKEN] != "("):
@@ -179,13 +197,18 @@ class PascalSintaxe:
         self.currentSymbol = self.getNextToken()
     
     def ListOfParameters(self):
-        self.ListOfIds()
+        aux_ids = self.ListOfIds()
 
         if(self.currentSymbol != ":"):
             raise Exception("Missing : at line {}".format(self.currentSymbol[LINE]))
         self.currentSymbol = self.getNextToken()
 
+        aux_type = self.currentSymbol[TOKEN]
         self.Type()
+
+        for identifier in aux_ids:
+            self.scopeStack.create_id(identifier, aux_type)
+
         self.ListOfParameters_L()
     
     def ListOfParameters_L(self):
@@ -193,14 +216,19 @@ class PascalSintaxe:
             return []
             #raise Exception("Missing ; at line {}".format(self.currentSymbol[LINE]))
         self.currentSymbol = self.getNextToken()
-        
-        self.ListOfIds()
+
+        aux_ids = self.ListOfIds()
 
         if (self.currentSymbol[TOKEN] != ':'):
             raise Exception('Missing : at line {}'.format(self.currentSymbol[LINE]))
         self.currentSymbol = self.getNextToken()
         
+        aux_type = self.currentSymbol[TOKEN]
         self.Type()
+
+        for identifier in aux_ids:
+            self.scopeStack.create_id(identifier, aux_type)
+
         self.ListOfParameters_L()
     
     def CompoundCommand(self):
@@ -211,7 +239,11 @@ class PascalSintaxe:
                 )
         self.currentSymbol = self.getNextToken()
 
+        self.scopeStack.new_scope()
+
         self.OptionalCommands()
+
+        self.scopeStack.end_scope()
 
         if (self.currentSymbol[TOKEN] != "end"):
             raise Exception(
@@ -304,6 +336,7 @@ class PascalSintaxe:
     def Variable(self):
         if (self.currentSymbol[SYMBOL] != "identifier"):
             raise BailoutException
+        self.scopeStack.search(self.currentSymbol[TOKEN])
         self.currentSymbol = self.getNextToken()
 
     def ProcedureActivation(self):
