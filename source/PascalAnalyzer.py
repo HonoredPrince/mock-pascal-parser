@@ -1,6 +1,6 @@
 import re
 
-def chechaParenteses(text):
+def checaParenteses(text):
 
     parenteses_abertos = 0
 
@@ -38,13 +38,15 @@ def genericRegexCreator():
 
         (r':=', 'attribution'),
         (r'=|>|<|<=|>=|<>', 'comparison'),
-        (r';|:|\(|\)|,|\.', 'delimiter'),
+        (r';|:|\(|\)|,', 'delimiter'),
 
         (r'\+|-|or', 'additive'),
         (r'\*|/|and', 'multiplicative'),
 
         (r'[0-9]+\.[0-9]*', 'realNumber'),
         (r'[0-9]+', 'integer'),
+
+        (r'\.', 'delimiter'),
         
         (r'[a-z]+[a-z0-9_]*', 'identifier'),
 

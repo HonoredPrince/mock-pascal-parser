@@ -5,6 +5,7 @@ import source.PascalAnalyzer as PascalAnalyzer
 from source.LexicalResult import LexicalResult
 from source.PascalSintaxe import PascalSintaxe
 
+#Run: python main.py .\benchmarks\benchmark-arquivos_testes\PAS\Test{number}.pas
 
 def argsTest():
     if len(sys.argv) < 2:
@@ -25,7 +26,7 @@ if __name__ == '__main__':
 
     lines = pascalFileContent.readlines()
 
-    PascalAnalyzer.chechaParenteses(("".join(lines)))
+    PascalAnalyzer.checaParenteses(("".join(lines)))
     lines = PascalAnalyzer.removeComentarios(lines)
 
     #print(lines)
