@@ -1,22 +1,8 @@
-program Test7;
-var
-   A, B, R, I : real;
-
-procedure teste (A:integer, B:real);
-var
-   S,X: real;
+program operators;
 begin
-   S := A + B * X
-end  {verifique se é necessário um ";" no fechamento de um procedimento}
-
-begin
-   while (I <= 5) do
-   begin
-      A := A+1;
-      B := B-1;
-      R := A + B;
-      I := I + 1
-   end
+    clrscr;
+    writeln(17 div 3);
+    readln;
+    writeln(7 mod 4);
+    readln;
 end.
-
-{retirar algumas palavras reservadas para gerar erros sintáticos}

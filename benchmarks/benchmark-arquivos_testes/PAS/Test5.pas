@@ -6,7 +6,7 @@ begin
    begin
       A := A * A;
       B := B * A;
-      R := A + B
+      R := A + B;
    end
 end.
 

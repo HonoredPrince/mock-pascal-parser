@@ -25,13 +25,15 @@ class PascalSintaxe:
         tokenLine = self.tokens[self.counter]
         self.counter += 1
 
+        #Debug Order of Tokens
+        print(tokenLine)
         return tokenLine
 
     def StartSintaxeAnalyzer(self):
         self.currentSymbol = self.getNextToken()
         if (self.currentSymbol[TOKEN] == "program"):
-            self.program()
             self.scopeStack.new_scope()
+            self.program()
         else:
             raise Exception(
                 "Program did not start with program keyword. Started with {} instead" \
@@ -44,7 +46,7 @@ class PascalSintaxe:
             self.scopeStack.create_id(self.currentSymbol[TOKEN], "program_declaration")
         else:
             raise Exception(
-            "Error parsing {} at line {}: missing identifier" \
+            "Error parsing {} at line {}: missing program identifier" \
             .format(self.currentSymbol[TOKEN], self.currentSymbol[LINE])
             )
         self.currentSymbol = self.getNextToken()
@@ -120,7 +122,7 @@ class PascalSintaxe:
     def ListOfIds_L(self):
         if (self.currentSymbol[TOKEN] != ","):
             return []
-            #raise Exception("Missing , at line {}".format(self.currentSymbol[LINE]))
+
         self.currentSymbol = self.getNextToken()
 
         if (self.currentSymbol[SYMBOL] == "identifier"):
@@ -145,7 +147,7 @@ class PascalSintaxe:
             return
         
         if(self.currentSymbol[TOKEN] != ";"):
-            raise Exception("Missing ; at line {}".format(self.currentSymbol[LINE]))
+            raise Exception("Expected ; at line {}, got {} instead.".format(self.currentSymbol[LINE], self.currentSymbol[TOKEN]))
         self.currentSymbol = self.getNextToken()
         
         self.SubprogramsDeclarations_L()
@@ -158,7 +160,7 @@ class PascalSintaxe:
                 )
         self.currentSymbol = self.getNextToken()
         
-        if (self.currentSymbol[SYMBOL] != 'identifier'):
+        if (self.currentSymbol[SYMBOL] == 'identifier'):
             self.scopeStack.create_id(self.currentSymbol[TOKEN], 'proc')
             self.scopeStack.new_scope()
         else:
@@ -176,6 +178,7 @@ class PascalSintaxe:
                 .format(self.currentSymbol[TOKEN], self.currentSymbol[LINE])
                 )
         self.currentSymbol = self.getNextToken()
+        
         self.VariableDeclarations()
         self.SubprogramDeclarations()
         self.CompoundCommand()
@@ -237,9 +240,8 @@ class PascalSintaxe:
                 'Expected begin at line {}, got {} instead' \
                 .format(self.currentSymbol[LINE], self.currentSymbol[TOKEN])
                 )
-        self.currentSymbol = self.getNextToken()
-
         self.scopeStack.new_scope()
+        self.currentSymbol = self.getNextToken()
 
         self.OptionalCommands()
 
@@ -303,6 +305,7 @@ class PascalSintaxe:
             if(self.currentSymbol[TOKEN] != "then"):
                 raise Exception("Missing then after if at line {}.".format(self.currentSymbol[LINE]))
             self.currentSymbol = self.getNextToken()
+            
             self.Command()
             self.ElsePart()
             return
@@ -357,7 +360,7 @@ class PascalSintaxe:
         self.ListOfExpressions_L()
 
     def ListOfExpressions_L(self):
-        if (self.currentSymbol[TOKEN] != ","):
+        if (self.currentSymbol[TOKEN] == ","):
             self.Expression()
             self.ListOfExpressions_L()
     
@@ -368,6 +371,7 @@ class PascalSintaxe:
             self.RelationalOp()
         except BailoutException:
             return
+        
         self.SimpleExpression()
     
     def SimpleExpression(self):
@@ -414,6 +418,7 @@ class PascalSintaxe:
                     raise Exception("Unclosed parenthesis at line {}.".format(self.currentSymbol[LINE]))
                 return
             return
+        
         try:
             self.TypeNum()
         except BailoutException:

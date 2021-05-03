@@ -34,7 +34,7 @@ def removeComentarios(lines):
 
 def genericRegexCreator():
     token_types = [
-        (r'program|var|integer|real|boolean|procedure|begin|end|if|then|else|while|do|not', 'keyWord'),
+        (r'program|var|integer|real|boolean|procedure|begin|end|if|then|else|while|for|do|not', 'keyWord'),
 
         (r':=', 'attribution'),
         (r'=|>|<|<=|>=|<>', 'comparison'),

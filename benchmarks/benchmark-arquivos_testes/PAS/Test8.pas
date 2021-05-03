@@ -1,8 +1,16 @@
-program operators;
-begin
-    clrscr;
-    writeln(17 div 3);
-    readln;
-    writeln(7 mod 4);
-    readln;
-end.
+Program resultado;
+Var
+	N1,N2,N3 : Real;
+	S, M : Real;
+    Result : boolean;
+Begin
+    N1:=7.5;
+    N2:=5.5;
+    N3:=4.5;
+    S:=N1+N2+N3;
+    M:=S/3;
+    If(M>=5)Then
+        Result:=True
+    Else
+        Result:=False
+End.
