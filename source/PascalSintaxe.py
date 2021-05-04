@@ -442,7 +442,7 @@ class PascalSintaxe:
                         )
     
     def TypeNum(self):
-        if (self.currentSymbol[SYMBOL] not in ["integer", "real"]):
+        if (self.currentSymbol[SYMBOL] not in ["integer", "realNumber"]):
             raise BailoutException(
                 "{} is not a valid type at line {}, expected a number" \
                 .format(self.currentSymbol[TOKEN], self.currentSymbol[LINE])
