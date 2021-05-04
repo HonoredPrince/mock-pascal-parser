@@ -37,7 +37,7 @@ def genericRegexCreator():
         (r'program|var|integer|real|boolean|procedure|begin|end|if|then|else|while|for|do|not', 'keyWord'),
 
         (r':=', 'attribution'),
-        (r'=|>|<|<=|>=|<>', 'comparison'),
+        (r'<=|>=|<>|=|<|>', 'comparison'),
         (r';|:|\(|\)|,', 'delimiter'),
 
         (r'\+|-|or', 'additive'),

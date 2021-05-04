@@ -1,5 +1,6 @@
 from source.LexicalResult import LexicalResult
 from source.ScopeStack import ScopeStack
+import inspect;
 
 TOKEN = 0
 SYMBOL = 1
@@ -29,7 +30,12 @@ class PascalSintaxe:
         print(tokenLine)
         return tokenLine
 
+    def getCurrentFrameFunctionName(self):
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
+    
     def StartSintaxeAnalyzer(self):
+        print()
         self.currentSymbol = self.getNextToken()
         if (self.currentSymbol[TOKEN] == "program"):
             self.scopeStack.new_scope()
@@ -41,6 +47,9 @@ class PascalSintaxe:
             )
     
     def program(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         self.currentSymbol = self.getNextToken()
         if (self.currentSymbol[SYMBOL] == "identifier"):
             self.scopeStack.create_id(self.currentSymbol[TOKEN], "program_declaration")
@@ -63,11 +72,17 @@ class PascalSintaxe:
             raise Exception("Missing . at the end of the program")
     
     def VariableDeclarations(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] == "var"):
             self.currentSymbol = self.getNextToken()
             self.ListOfVariableDeclarations()
     
     def ListOfVariableDeclarations(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         listIds = self.ListOfIds()
 
         if (self.currentSymbol[TOKEN] != ":"):
@@ -87,6 +102,9 @@ class PascalSintaxe:
         self.ListOfVariableDeclarations_L()
     
     def ListOfVariableDeclarations_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         try:
             listIds = self.ListOfIds()
         except BailoutException:
@@ -109,6 +127,9 @@ class PascalSintaxe:
         self.ListOfVariableDeclarations_L()
 
     def ListOfIds(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[SYMBOL] == "identifier"):
             aux = [self.currentSymbol[TOKEN]]
             self.currentSymbol = self.getNextToken()
@@ -120,6 +141,9 @@ class PascalSintaxe:
             )
     
     def ListOfIds_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] != ","):
             return []
 
@@ -131,6 +155,9 @@ class PascalSintaxe:
             return aux + self.ListOfIds_L()
 
     def Type(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] not in ["integer", "real", "boolean"]):
             raise Exception(
             "{} is not a valid type at line {}".format(self.currentSymbol[TOKEN], self.currentSymbol[LINE])
@@ -138,9 +165,15 @@ class PascalSintaxe:
         self.currentSymbol = self.getNextToken()
 
     def SubprogramDeclarations(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         self.SubprogramsDeclarations_L()
 
     def SubprogramsDeclarations_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         try:
             self.SubprogramDeclaration()
         except:
@@ -153,6 +186,9 @@ class PascalSintaxe:
         self.SubprogramsDeclarations_L()
     
     def SubprogramDeclaration(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] != 'procedure'):
             raise BailoutException(
                 'Expected procedure at line {}, got {} instead' \
@@ -186,6 +222,9 @@ class PascalSintaxe:
         self.scopeStack.end_scope()
     
     def Arguments(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] != "("):
             return
         self.currentSymbol = self.getNextToken()
@@ -200,6 +239,9 @@ class PascalSintaxe:
         self.currentSymbol = self.getNextToken()
     
     def ListOfParameters(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         aux_ids = self.ListOfIds()
 
         if(self.currentSymbol != ":"):
@@ -215,6 +257,9 @@ class PascalSintaxe:
         self.ListOfParameters_L()
     
     def ListOfParameters_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] != ';'):
             return []
             #raise Exception("Missing ; at line {}".format(self.currentSymbol[LINE]))
@@ -235,6 +280,9 @@ class PascalSintaxe:
         self.ListOfParameters_L()
     
     def CompoundCommand(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] != "begin"):
             raise BailoutException(
                 'Expected begin at line {}, got {} instead' \
@@ -255,16 +303,25 @@ class PascalSintaxe:
         self.currentSymbol = self.getNextToken()
     
     def OptionalCommands(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         try:
             self.ListOfCommands()
         except BailoutException:
             return
     
     def ListOfCommands(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         self.Command()
         self.ListOfCommands_L()
 
     def ListOfCommands_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] != ';'):
             return
         self.currentSymbol = self.getNextToken()
@@ -273,6 +330,9 @@ class PascalSintaxe:
         self.ListOfCommands_L()
 
     def Command(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         try:
             self.Variable()
             if(self.currentSymbol[TOKEN] == ":="):
@@ -330,6 +390,9 @@ class PascalSintaxe:
             raise Exception("Expected a command at line {}".format(self.currentSymbol[LINE]))
     
     def ElsePart(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] != "else"):
             return
         self.currentSymbol = self.getNextToken()
@@ -337,12 +400,18 @@ class PascalSintaxe:
         self.Command()
 
     def Variable(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[SYMBOL] != "identifier"):
             raise BailoutException
         self.scopeStack.search(self.currentSymbol[TOKEN])
         self.currentSymbol = self.getNextToken()
 
     def ProcedureActivation(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[SYMBOL] != "identifier"):
             raise BailoutException
         self.currentSymbol = self.getNextToken()
@@ -350,21 +419,33 @@ class PascalSintaxe:
         self.ProcedureActivation_L()
     
     def ProcedureActivation_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         try:
             self.ListOfExpressions()
         except BailoutException:
             return
     
     def ListOfExpressions(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         self.Expression()
         self.ListOfExpressions_L()
 
     def ListOfExpressions_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] == ","):
             self.Expression()
             self.ListOfExpressions_L()
     
     def Expression(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         self.SimpleExpression()
 
         try:
@@ -375,6 +456,9 @@ class PascalSintaxe:
         self.SimpleExpression()
     
     def SimpleExpression(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         try:
             self.Term()
         except BailoutException:
@@ -390,6 +474,9 @@ class PascalSintaxe:
         self.SimpleExpression_L()
     
     def SimpleExpression_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         try:
             self.AdditiveOp()
         except BailoutException:
@@ -398,10 +485,16 @@ class PascalSintaxe:
         self.SimpleExpression_L()
 
     def Term(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         self.Factor()
         self.Term_L()
     
     def Term_L(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         try:
             self.MultiOp()
         except BailoutException:
@@ -410,6 +503,9 @@ class PascalSintaxe:
         self.Term_L()
     
     def Factor(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[SYMBOL] == "identifier"):
             self.currentSymbol = self.getNextToken()
             if (self.currentSymbol[TOKEN] == "("):
@@ -442,6 +538,9 @@ class PascalSintaxe:
                         )
     
     def TypeNum(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[SYMBOL] not in ["integer", "realNumber"]):
             raise BailoutException(
                 "{} is not a valid type at line {}, expected a number" \
@@ -450,21 +549,33 @@ class PascalSintaxe:
         self.currentSymbol = self.getNextToken()
     
     def Signal(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] not in ['+', '-']):
             raise BailoutException
         self.currentSymbol = self.getNextToken()
 
     def RelationalOp(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] not in ['=', '<', '>', '<=', '>=', '<>']):
             raise BailoutException
         self.currentSymbol = self.getNextToken()
 
     def AdditiveOp(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] not in ['+', '-', 'or']):
             raise BailoutException
         self.currentSymbol = self.getNextToken()
 
     def MultiOp(self):
+        #Debug Function Name
+        this_function_name = inspect.currentframe().f_code.co_name
+        print(this_function_name)
         if (self.currentSymbol[TOKEN] not in ['*', '/', 'and']):
             raise BailoutException
         self.currentSymbol = self.getNextToken()

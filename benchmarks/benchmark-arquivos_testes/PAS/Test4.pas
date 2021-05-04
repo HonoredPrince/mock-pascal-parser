@@ -2,7 +2,7 @@ program Test4;
 var
    A, B, R, I : integer;
 
-procedure teste (A:integer);
+procedure teste (A : integer);
 var
    S,X: real;
 begin

@@ -1,12 +1,12 @@
 program Test1;
    var
       Area, Comprimento, Raio : real; 
-   begin   {essa linha deve gerar um erro devido ao caracter não conhecido}
-      Raio := 4;
-      Area := 3.14 * Raio * Raio;
-      Comprimento := 2 * 3.14 * Raio
+   & begin   {O caractere "&" nessa linha deve gerar um erro devido ele ser não conhecido}
+      Raio := 4 ;
+      Area := 3.14 * Raio * Raio ;
+      Comprimento := 2 * 3.14 * Raio 
 end.
 
-{testar multiplos espacos também}
-{gere erros sintáticos, como retirar uma atribuição}
-{veja o que a especificação diz em relação ao uso de ";" no último comando. Eh necessário?}
+{Testar multiplos espacos também}
+{Gere erros sintáticos, como retirar uma atribuição}
+{Veja o que a especificação diz em relação ao uso de ";" no último comando. Eh necessário?}
